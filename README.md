@@ -12,12 +12,20 @@
 | `tools/build.py` | 產生 `dist/index.html` |
 | `.github/workflows/pages.yml` | 發布到 GitHub Pages（僅手動觸發） |
 
+## 這個工具做什麼、不做什麼
+
+- **做**：把 `data/` 裡**已經算好**的比較結果放進頁面範本，產生一個單一檔案的網頁 `dist/index.html`。
+- **不做**：不會連到教育部平台下載資料，也不會重新計算名次。`data/dashboard.json` 是事先算好的結果；
+  要更新數字，需先更新這個檔案，再重新建置。
+
 ## 建置與本機預覽
 
 ```bash
 python3 tools/build.py
 python3 -m http.server -d dist 8000
 ```
+
+Windows 請把 `python3` 改成 `python`。也可以直接用瀏覽器開啟 `dist/index.html`（不需要伺服器）。
 
 `build.py` 會：
 
