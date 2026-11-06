@@ -12,7 +12,11 @@
 - 發布步驟：合併到 `main` → Settings → Pages 設 Source 為 GitHub Actions → Actions 手動 Run workflow。
 - 公開性尚未決定：私人庫用 Pages 需 Pro/Team，且網站本身公開；或改公開庫；或不發布只傳 `dist/index.html`。
 
-## 下一步：每年半自動更新
+## 每年半自動更新（2026-11-06 完成）
+- 已整理成 `tools/config.py`、`tools/fetch.py`、`tools/compute.py`；用 2026 原始報表算出的 `data/dashboard.json` 與現有檔案逐位元組相同（SHA256 f24a53f6…）。
+- `data/raw/` 不進版控（.gitignore）。fetch.py 尚未實際連線測試（下載需先經同意）。
+
+## 原本的規劃
 - 原始流程在 `D:\校務研究\AI agent 主題\校務研究AgentTeam\專案\115學年度_校務公開資料儀表板`。**只能讀，不能刪改。**
 - 目標：整理成 `tools/fetch.py`（下載平台報表到 `data/raw/<年度>/`）與 `tools/compute.py`（依口徑算出 `data/dashboard.json`），
   並驗證用現有原始報表算出的結果與目前 `data/dashboard.json` 完全一致。
