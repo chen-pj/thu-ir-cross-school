@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>校務公開資料儀表板：校際比較</title>
+<style>
+:root{
+  --th:#118DFF;      /* 本校：舊版截圖取色 */
+  --c1:#FF7F0E;      /* 前1名 */
+  --c2:#7C1D8A;      /* 前2、前3名 */
+  --band:#F0E199;    /* 區塊標題列 */
+  --navy:#12239E;    /* 校名深藍 */
+  --g:#1E7E34;       /* 校內網站綠（介面外框） */
+  --g-l:#E7F1EA;
+  --head:#062284;    /* 分組標題深藍（校網側欄） */
+  --bg:#f5f5f7;--card:#fff;--text:#1d1d1f;--sub:#6e6e73;--line:#e5e5ea;
+  --radius:18px;--shadow:0 2px 12px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden}
+html.lock{overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro TC","SF Pro Text","PingFang TC","Microsoft JhengHei","微軟正黑體","Noto Sans TC",sans-serif;color:var(--text);background:var(--bg);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+header.top{padding:40px 0 12px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+header.top h1{margin:0;font-size:32px;line-height:1.2;letter-spacing:.5px;font-weight:700;color:var(--g)}
+.topbar{height:6px;background:var(--g)}
+header.top .sub{margin-top:6px;font-size:16px;color:var(--sub)}
+.src{text-align:right;font-size:14px;color:var(--sub)}
+.bar{position:sticky;top:0;z-index:5;background:rgba(245,245,247,.85);-webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);border-bottom:1px solid rgba(0,0,0,.06)}
+.bar .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
+.bar .lbl{font-weight:600;font-size:14px}
+.hint{font-size:12px;color:var(--sub)}
+.seg{display:inline-flex;gap:6px;flex-wrap:wrap}
+.pill{border:1.5px solid var(--g);background:#fff;font-size:14px;font-weight:600;padding:4px 16px;border-radius:999px;cursor:pointer;color:var(--g);transition:background .18s ease,color .18s ease,box-shadow .18s ease}
+.pill:hover{background:var(--g-l)}
+.pill.on{background:var(--g);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.pill.on:hover{background:var(--g)}
+.pill:focus-visible,.oc:focus-visible,.close:focus-visible{outline:3px solid rgba(30,126,52,.45);outline-offset:2px}
+.intro{padding:14px 0 0;font-size:14px;color:var(--sub)}
+.grp{margin:34px 0 0}
+.grp .cap{font-size:13px;color:var(--sub);margin:-6px 0 12px}
+.tnote{padding:8px 20px 0;font-size:12px;color:var(--sub)}
+.grp h2{margin:0 0 14px;padding-bottom:6px;font-size:22px;font-weight:700;color:var(--head);border-bottom:2px solid var(--head)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.oc{display:flex;flex-direction:column;text-align:left;background:var(--card);border:0;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 20px 16px;cursor:pointer;min-width:0;transition:transform .2s ease,box-shadow .2s ease}
+.oc:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.10)}
+.oc:active{transform:scale(.985)}
+.oc-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.oc-name{font-size:17px;font-weight:600;overflow-wrap:anywhere}
+.oc-deg{font-size:12px;color:var(--sub);background:#f2f2f4;border-radius:999px;padding:1px 9px;white-space:nowrap}
+.oc-val{margin-top:10px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.oc-val b{font-size:32px;line-height:1.15;color:var(--text);font-weight:700;font-variant-numeric:tabular-nums}
+.oc-val b.long{font-size:26px}
+.oc-val b.xl{font-size:22px}
+.oc-val small{font-size:12px;color:var(--sub)}
+.oc-rank{margin-top:2px;font-size:14px;color:var(--sub)}
+.oc-rank b{color:var(--text);font-variant-numeric:tabular-nums}
+.badge{display:inline-block;margin-left:6px;font-size:12px;font-weight:600;color:#fff;background:var(--g);border-radius:999px;padding:0 8px}
+.spark{display:block;width:100%;height:auto;margin:10px 0 0}
+.spark-x{display:flex;justify-content:space-between;font-size:12px;color:var(--sub)}
+.oc-gap{margin-top:8px;font-size:14px;overflow-wrap:anywhere}
+.oc-gap b{font-variant-numeric:tabular-nums}
+.oc-gap .cmp{color:var(--navy);font-weight:600}
+.oc-more{margin-top:8px;font-size:12px;font-weight:600;color:var(--g)}
+.oc-nodata{margin-top:14px;color:var(--sub)}
+
+/* 展開面板 */
+.ov{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);overflow-y:auto;padding:4vh 16px;opacity:0;transition:opacity .2s ease}
+.ov[hidden]{display:none}
+.ov.show{opacity:1}
+.panel{position:relative;max-width:1100px;margin:0 auto;background:#fff;border-radius:22px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;transform:translateY(24px) scale(.985);transition:transform .24s cubic-bezier(.2,.8,.2,1)}
+.ov.show .panel{transform:none}
+.panel h2{margin:0;padding:16px 56px;background:var(--band);font-size:18px;text-align:center}
+.close{position:absolute;top:10px;right:12px;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.65);font-size:22px;line-height:1;cursor:pointer;color:var(--text)}
+.close:hover{background:#fff}
+.tools{padding:12px 20px 0;display:flex;gap:10px 20px;align-items:center;flex-wrap:wrap}
+.tools .tl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tools .lbl{font-size:14px;font-weight:600}
+.tools .pill{padding:3px 14px}
+.upper{display:flex;gap:16px;padding:14px 20px;align-items:stretch}
+.cards{width:285px;flex:none;background:#f7f7f9;border-radius:14px;padding:10px 12px;align-self:flex-start}
+.cmp-h{font-size:16px;font-weight:700;margin-bottom:6px}
+.cmp-head,.cmp-row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:8px;align-items:baseline}
+.cmp-head{font-size:12px;color:var(--sub);padding-bottom:3px;border-bottom:1px solid var(--line)}
+.cmp-head span:last-child,.cmp-gap{text-align:right}
+.cmp-row{padding:7px 0;border-bottom:1px solid #eeeef1}
+.cmp-row:last-child{border-bottom:0}
+.cmp-y{font-size:14px;color:var(--sub);font-variant-numeric:tabular-nums}
+.cmp-s{font-size:15px;font-weight:700;color:var(--navy);overflow-wrap:anywhere}
+.cmp-s .me{display:block;color:var(--th);font-size:14px}
+.cmp-gap{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cmp-nd{grid-column:2 / 4;color:var(--sub);font-size:14px}
+.chartwrap{flex:1;min-width:0}
+.legend{font-size:12px;display:flex;gap:16px;flex-wrap:wrap;margin-bottom:2px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+.chart{width:100%;overflow:hidden}
+.chart svg text.hl{paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+.chart svg{display:block;overflow:visible}
+.tbl{padding:0 20px 8px}
+table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px}
+th{font-weight:700;border-bottom:2px solid var(--line);padding:4px 3px;text-align:center;overflow-wrap:anywhere}
+th.hth{color:var(--th)} th.h1{color:var(--c1)} th.h2{color:var(--c2)} th.hn{color:var(--sub)}
+td{padding:4px 3px;text-align:center;border-bottom:1px solid #eeeef1;overflow-wrap:anywhere;word-break:break-all}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap;word-break:keep-all;overflow-wrap:normal}
+td.th{color:var(--th);font-weight:700}
+td.c1{color:var(--c1);font-weight:600}
+td.c2{color:var(--c2);font-weight:600}
+tr.rem td{text-align:left;font-size:12px;color:var(--sub);border-bottom:1px solid var(--line)}
+tr.yr td{border-bottom:none}
+tr.nd td{color:var(--sub)}
+.tag{font-size:12px;border:1px solid var(--sub);color:var(--sub);border-radius:6px;padding:0 4px;margin-left:3px;white-space:nowrap;font-weight:400}
+.foot{padding:8px 20px 16px;font-size:12px;color:var(--sub);border-top:1px solid #eeeef1}
+.foot div{margin-top:2px}
+footer.page{padding:36px 0 96px;font-size:12px;color:var(--sub)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:900px){
+  .tbl{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{table-layout:auto;min-width:720px}
+  td{word-break:normal}
+  td.sch,td.c1,td.c2{min-width:6.5em}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  header.top{padding-top:28px}
+  header.top h1{font-size:26px}
+  .src{text-align:left}
+  .ov{padding:0}
+  .panel{border-radius:0;min-height:100%}
+  .upper{flex-direction:column}
+  .cards{width:100%}
+  table{font-size:12px}
+  .tools,.upper,.tbl,.foot{padding-left:12px;padding-right:12px}
+}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="wrap">
+  <header class="top">
+    <div><h1>校務公開資料儀表板</h1><div class="sub">東海大學校際比較</div></div>
+    <div class="src"><div id="src"></div><div id="upd"></div></div>
+  </header>
+  <div class="intro">比較學校為各指標、各學年度名次排在東海前面、最接近東海的 3 所一般大學，會隨指標與年度改變。</div>
+</div>
+<div class="bar"><div class="wrap"><span class="lbl">學年度／年度</span><span class="seg" id="yearbtns" role="group" aria-label="學年度或年度（可多選）"></span><span class="hint">可多選；研發類指標以「年度」計，與學年度為不同時間概念。點選指標卡片，查看各年度比較、折線圖與前1～3名</span></div></div>
+<div class="wrap">
+  <main id="main"></main>
+  <footer class="page">資料為教育部「大學校院校務資訊公開平台」公開統計；名次與差距描述數字位置，不代表表現優劣或因果；全校結果不推論到個別學系。</footer>
+</div>
+<div class="ov" id="ov" hidden><div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="ptitle"></div></div>
+
+
+<script id="data" type="application/json">__DATA__</script>
+<script id="notes" type="application/json">__NOTES__</script>
+<script>
+(function(){
+var D = JSON.parse(document.getElementById('data').textContent);
+var NOTES = JSON.parse(document.getElementById('notes').textContent);
+var TH = D['本校']['學校名稱'];
+var YEARS = D['學年度清單'].slice();
+var sel = {}; YEARS.forEach(function(y){sel[y]=true;});
+var BYID = {}; D['區塊'].forEach(function(b){BYID[b['區塊編號']]=b;});
+var deg = {}; D['區塊'].forEach(function(b){deg[b['區塊編號']] = b['預設學制'];});
+var openId = null, lastFocus = null;
+var C_TH='#118DFF', C_1='#FF7F0E';
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function fmt(v){
+  if(v===null||v===undefined) return '—';
+  var n=Math.round(Number(v)*100)/100; if(n===0) n=0; /* 避免顯示 -0 */
+  return n.toLocaleString('en-US',{maximumFractionDigits:2});
+}
+function fmt2(v){var n=Math.round(Number(v)*100)/100; if(n===0) n=0; return n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtv(v,unit){if(v===null||v===undefined) return '—'; return unit==='%'?fmt2(v)+'%':fmt(v);}
+function gapUnit(unit){return unit==='%'?'百分點':unit;}
+function tuOf(b){return b['時間單位']||'學年度';}
+function blockYears(b){var tl=b['年度清單']||YEARS; var y=selYears().filter(function(v){return tl.indexOf(v)>=0;}); return y.length?y:selYears();}
+function gapText(t){return String(t==null?'':t).replace(/(\d+(?:\.\d+)?)(人次|人|百分點)/g,function(m,n,u){return fmt(Number(n))+' '+u;});}
+function fmtgap(v,unit){if(v===null||v===undefined) return '—'; return (v>0?'+':'')+(unit==='%'?fmt2(v):fmt(v));}
+function selYears(){return YEARS.filter(function(y){return sel[y];});}
+function descYears(){return selYears().sort(function(a,b){return b-a;});}
+
+document.getElementById('src').textContent = '資料來源：' + NOTES['_src'];
+document.getElementById('upd').textContent = '資料更新日期：' + D['資料更新日期'];
+
+function seriesOf(b){
+  var d=deg[b['區塊編號']];
+  for(var i=0;i<b['序列'].length;i++){ if(b['序列'][i]['學制']===d) return b['序列'][i]; }
+  return b['序列'][0];
+}
+function yd(s,y){
+  for(var i=0;i<s['年度資料'].length;i++){ if(s['年度資料'][i]['學年度']===y) return s['年度資料'][i]; }
+  return null;
+}
+
+/* ---------- 學年度分段控制 ---------- */
+function yearPills(list){
+  return (list||YEARS).map(function(y){return '<button type="button" class="pill'+(sel[y]?' on':'')+'" data-y="'+y+'" aria-pressed="'+(!!sel[y])+'">'+y+'</button>';}).join('');
+}
+
+/* ---------- 總覽 ---------- */
+function sparkSVG(vals){
+  var w=220,h=44,p=6,n=vals.length;
+  if(!n) return '';
+  var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals); if(hi===lo){hi+=1;lo-=1;}
+  function X(i){return n===1?w/2:p+i*(w-2*p)/(n-1);}
+  function Y(v){return h-p-(v-lo)/(hi-lo)*(h-2*p);}
+  var s='<svg class="spark" viewBox="0 0 '+w+' '+h+'" aria-hidden="true">';
+  if(n>1) s+='<polyline fill="none" stroke="'+C_TH+'" stroke-opacity=".65" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="'+vals.map(function(v,i){return X(i)+','+Y(v);}).join(' ')+'"/>';
+  vals.forEach(function(v,i){s+='<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="'+(i===n-1?4.5:3)+'" fill="'+C_TH+'" fill-opacity=".8" stroke="#fff" stroke-width="1.5"/>';});
+  return s+'</svg>';
+}
+function ocHTML(b){
+  var s=seriesOf(b), unit=b['單位'], tu=tuOf(b), ys=blockYears(b).sort(function(a,c){return c-a;}), r=null, ry=null;
+  for(var i=0;i<ys.length;i++){var q=yd(s,ys[i]); if(q&&q['狀態']==='有資料'){r=q;ry=ys[i];break;}}
+  var h='<button type="button" class="oc" data-open="'+esc(b['區塊編號'])+'" aria-haspopup="dialog" aria-label="'+esc(b['指標'])+'，查看詳細內容">';
+  h+='<div class="oc-h"><span class="oc-name">'+esc(b['指標'])+'</span><span class="oc-deg">'+esc(s['學制'])+'</span></div>';
+  if(!r){ return h+'<div class="oc-nodata">所選年度無資料</div></button>'; }
+  var c=r['卡片'], first=r['本校第1名'];
+  var vt=fmtv(r['本校數值'],unit);
+  h+='<div class="oc-val"><b'+(vt.length>12?' class="xl"':(vt.length>8?' class="long"':''))+'>'+esc(vt)+'</b><small>'+(unit==='%'?'':esc(unit)+' · ')+esc(ry)+' '+esc(tu)+'</small></div>';
+  h+='<div class="oc-rank">名次 <b>'+esc(r['本校名次'])+'／'+esc(r['母體校數'])+'</b>'+(first?'<span class="badge">第 1 名</span>':'')+'</div>';
+  var vals=[], yrs=[];
+  blockYears(b).sort(function(a,c){return a-c;}).forEach(function(y){var q=yd(s,y); if(q&&q['狀態']==='有資料'){vals.push(q['本校數值']);yrs.push(y);}});
+  h+=sparkSVG(vals);
+  if(yrs.length) h+='<div class="spark-x"><span>'+yrs[0]+'</span><span>'+(yrs.length>1?yrs[yrs.length-1]:'')+'</span></div>';
+  h+='<div class="oc-gap">與'+esc(c['比較標籤'])+'差距 <b>'+esc(fmtgap(c['差距'],unit))+' '+esc(gapUnit(unit))+'</b> <span class="cmp">'+esc(c['比較學校名稱'])+'</span></div>';
+  return h+'<div class="oc-more">查看詳細內容 ›</div></button>';
+}
+function renderOverview(){
+  var used={}, h='';
+  function grp(name,ids,cap){
+    ids=ids.filter(function(id){return BYID[id];});
+    if(!ids.length) return '';
+    ids.forEach(function(id){used[id]=1;});
+    return '<section class="grp"><h2>'+esc(name)+'</h2>'+(cap?'<div class="cap">'+esc(cap)+'</div>':'')+'<div class="grid">'+ids.map(function(id){return ocHTML(BYID[id]);}).join('')+'</div></section>';
+  }
+  NOTES['_groups'].forEach(function(g){h+=grp(g[0],g[1],g[2]);});
+  var rest=D['區塊'].map(function(b){return b['區塊編號'];}).filter(function(id){return !used[id];});
+  h+=grp('其他',rest);
+  document.getElementById('main').innerHTML=h;
+}
+
+/* ---------- 詳細內容 ---------- */
+function cardHTML(y,r,unit){
+  if(!r||r['狀態']!=='有資料'){
+    return '<div class="cmp-row"><span class="cmp-y">'+y+'</span><span class="cmp-nd">無資料</span></div>';
+  }
+  /* 每年度一列：年度｜前1名校名｜差距（含單位；單位由區塊單位決定，百分比類為百分點） */
+  var c=r['卡片'], first=r['本校第1名'];
+  var gu=' '+gapUnit(unit);
+  var h='<div class="cmp-row"><span class="cmp-y">'+esc(c['學年度'])+'</span><span class="cmp-s">';
+  if(first) h+='<span class="me">'+esc(c['主文字'])+(r['並列學校數']>0?'（與 '+esc(r['並列學校數'])+' 校並列）':'')+'</span>'+esc(c['比較標籤'])+' ';
+  h+=esc(c['比較學校名稱'])+'</span><span class="cmp-gap">'+esc(fmtgap(c['差距'],unit))+gu+'</span></div>';
+  return h;
+}
+
+function niceTicks(lo,hi,n){
+  var span=hi-lo, raw=span/n, mag=Math.pow(10,Math.floor(Math.log(raw)/Math.LN10)), f=raw/mag;
+  var step=(f<1.5?1:f<3?2:f<7?5:10)*mag;
+  var t=[], v=Math.ceil(lo/step)*step;
+  for(;v<=hi+step*1e-6;v+=step){ var q=Math.round(v/step)*step; t.push(q===0?0:q); } /* 避免負零 */
+  return t;
+}
+
+function chartSVG(s,years,unit,W,tu){
+  var asc=years.slice().sort(function(a,b){return a-b;});
+  var H=330, ml=58, mr=14, mt=30, mb=48, pw=W-ml-mr, ph=H-mt-mb, n=asc.length;
+  var pts=[], vals=[];
+  asc.forEach(function(y,i){
+    var r=yd(s,y);
+    if(r&&r['狀態']==='有資料'){
+      var cs=r['比較學校']&&r['比較學校'][0];
+      var p={y:y,i:i,th:r['本校數值'],cv:cs?cs['數值']:null,cn:cs?cs['學校名稱']:'',fs:!!r['本校第1名']};
+      pts.push(p); vals.push(p.th); if(p.cv!==null) vals.push(p.cv);
+    }
+  });
+  var mx=vals.length?Math.max.apply(null,vals.map(Math.abs)):0, div=1, axU=unit;
+  if(unit==='元'){ if(mx>=1e6){div=1e6;axU='百萬元';} else if(mx>=1e4){div=1e4;axU='萬元';} }
+  function lab(v){ if(unit==='%') return fmtv(v,unit); if(div>1) return (Math.round(v/div*100)/100).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); return fmt(v); }
+  var lo=vals.length?Math.min.apply(null,vals):0, hi=vals.length?Math.max.apply(null,vals):1;
+  if(hi===lo){hi+=1;lo-=1;}
+  var allNonNeg=(vals.length===0)||Math.min.apply(null,vals)>=0;
+  var pad=(hi-lo)*0.3; lo-=pad; hi+=pad;
+  var anyFirst=pts.some(function(p){return p.fs;});
+  var cmpName=anyFirst?'前1名（本校第 1 名時為後1名）':'前1名';
+  var ticks=niceTicks(lo,hi,4).filter(function(t){return !allNonNeg||t>=0;}); /* 人數、人次、% 不顯示負刻度 */
+  function X(i){return ml+(i+0.5)*pw/n;}
+  function Y(v){return mt+ph-(v-lo)/(hi-lo)*ph;}
+  var s2='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="折線圖：本校與'+cmpName+'學校數值">';
+  s2+='<text x="'+(ml+pw/2)+'" y="14" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d1d1f">'+esc(TH)+'與'+(anyFirst?'前／後1名':'前1名')+'學校</text>';
+  ticks.forEach(function(t){
+    var y=Y(t);
+    s2+='<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+y+'" y2="'+y+'" stroke="#e5e5ea"/>';
+    s2+='<text x="'+(ml-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="12" fill="#515154">'+esc(fmt(t/div))+'</text>';
+  });
+  s2+='<line x1="'+ml+'" x2="'+ml+'" y1="'+mt+'" y2="'+(mt+ph)+'" stroke="#8e8e93"/>';
+  s2+='<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+(mt+ph)+'" y2="'+(mt+ph)+'" stroke="#8e8e93"/>';
+  s2+='<text x="'+(ml-6)+'" y="'+(mt-16)+'" text-anchor="end" font-size="12" fill="#515154">'+esc(axU)+'</text>';
+  asc.forEach(function(y,i){
+    s2+='<text x="'+X(i)+'" y="'+(mt+ph+16)+'" text-anchor="middle" font-size="12" fill="#1d1d1f">'+y+'</text>';
+    var r=yd(s,y);
+    if(!(r&&r['狀態']==='有資料')) s2+='<text x="'+X(i)+'" y="'+(mt+ph/2)+'" text-anchor="middle" font-size="12" fill="#8e8e93">無資料</text>';
+  });
+  s2+='<text x="'+(ml+pw/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="12" fill="#515154">'+esc(tu)+'</text>';
+  if(pts.length>1){
+    s2+='<polyline fill="none" stroke="'+C_TH+'" stroke-width="2.5" points="'+pts.map(function(p){return X(p.i)+','+Y(p.th);}).join(' ')+'"/>';
+  }
+  pts.forEach(function(p){
+    var x=X(p.i), up=(p.cv===null)||(p.th>=p.cv);
+    if(p.cv!==null){
+      var yc=Y(p.cv);
+      s2+='<circle cx="'+x+'" cy="'+yc+'" r="5" fill="'+C_1+'" stroke="#fff"/>';
+      /* 校名依每個年度可用寬度自動換行；太窄（每行不到 4 字）就只標數值 */
+      var ct=lab(p.cv), nm=(p.fs?'後1名 ':'')+p.cn, band=pw/n, cpl=Math.floor((band-8)/12), lines=[];
+      if(nm.length*12<=band-8) lines=[nm];
+      else if(cpl>=4){ var nl=Math.ceil(nm.length/cpl), per=Math.ceil(nm.length/nl); for(var q=0;q<nm.length;q+=per) lines.push(nm.substr(q,per)); }
+      var wmax=ct.length*7; lines.forEach(function(l){wmax=Math.max(wmax,l.length*12);}); wmax+=4;
+      var cx=Math.max(wmax/2+2,Math.min(W-wmax/2-2,x));
+      var all=lines.concat([ct]), L=all.length;
+      all.forEach(function(txt,k){
+        var yy=up?(yc+22+k*14):(yc-10-(L-1-k)*14);
+        s2+='<text class="hl" x="'+cx+'" y="'+yy+'" text-anchor="middle" font-size="12" font-weight="600" fill="'+C_1+'">'+esc(txt)+'</text>';
+      });
+    }
+    var yt=Y(p.th);
+    s2+='<circle cx="'+x+'" cy="'+yt+'" r="5" fill="'+C_TH+'" stroke="#fff"/>';
+    var t=lab(p.th), w2=t.length*7+6, lx2=Math.max(2,Math.min(W-w2-2,x-w2/2));
+    s2+='<text class="hl" x="'+lx2+'" y="'+(up?yt-10:yt+20)+'" font-size="12" font-weight="bold" fill="'+C_TH+'">'+esc(t)+'</text>';
+  });
+  return s2+'</svg>';
+}
+
+function tableHTML(s,years,unit,tu){
+  var desc=years.slice().sort(function(a,b){return b-a;});
+  var anyFirst=desc.some(function(y){var r=yd(s,y);return r&&r['狀態']==='有資料'&&r['本校第1名'];});
+  var pre=anyFirst?'前(後)':'前';
+  var h='<table><colgroup><col style="width:7%"><col style="width:9%"><col style="width:9%">'+
+        '<col style="width:16%"><col style="width:10%"><col style="width:16%"><col style="width:10%"><col style="width:16%"><col style="width:10%"></colgroup>';
+  h+='<thead><tr><th class="hn">'+esc(tu)+'</th><th class="hth">本校名次</th><th class="hth">本校數值</th>'+
+     '<th class="h1">'+pre+'1名學校</th><th class="h1">數值</th><th class="h2">'+pre+'2名學校</th><th class="h2">數值</th><th class="h2">'+pre+'3名學校</th><th class="h2">數值</th></tr></thead><tbody>';
+  desc.forEach(function(y){
+    var r=yd(s,y);
+    if(!r||r['狀態']!=='有資料'){
+      h+='<tr class="nd yr"><td>'+y+'</td><td colspan="8">無資料</td></tr>';
+      if(r&&r['備註']) h+='<tr class="rem"><td colspan="9">備註：'+esc(r['備註'])+'</td></tr>';
+      return;
+    }
+    h+='<tr class="yr"><td>'+y+'</td><td class="num th">'+esc(r['本校名次'])+'／'+esc(r['母體校數'])+'</td><td class="num th">'+esc(fmtv(r['本校數值'],unit))+'</td>';
+    for(var k=0;k<3;k++){
+      var c=r['比較學校'][k], cls=(k===0?'c1':'c2');
+      if(c){
+        h+='<td class="'+cls+'">'+(r['本校第1名']?'<span class="tag">後</span>':'')+esc(c['學校名稱'])+(c['同分']?'<span class="tag">同分</span>':'')+'</td><td class="num '+cls+'">'+esc(fmtv(c['數值'],unit))+'</td>';
+      } else h+='<td>—</td><td>—</td>';
+    }
+    h+='</tr>';
+    if(r['備註']) h+='<tr class="rem"><td colspan="9">備註：'+esc(r['備註'])+'</td></tr>';
+  });
+  return h+'</tbody></table>';
+}
+
+function footHTML(b,years){
+  var n=NOTES[b['區塊編號']]||{base:'',extra:[],cond:null};
+  var h='<div>來源報表：'+esc(b['來源報表'])+'｜資料最新年度：'+esc(b['資料最新年度'])+' '+esc(tuOf(b))+'｜單位：'+esc(b['單位'])+'｜'+esc(b['方向說明'])+'</div>';
+  var parts=[];
+  if(n.base) parts.push(n.base);
+  n.extra.forEach(function(t){parts.push(t);});
+  if(n.cond && deg[b['區塊編號']]===n.cond['學制'] && years.indexOf(n.cond['學年度'])>=0) parts.push(n.cond['text']);
+  if(parts.length) h+='<div>說明：'+esc(parts.join(' '))+'</div>';
+  return h;
+}
+
+function panelHTML(b){
+  var s=seriesOf(b), years=blockYears(b), tu=tuOf(b), unit=b['單位'], desc=years.slice().sort(function(a,c){return c-a;});
+  var h='<button type="button" class="close" data-close="1" aria-label="關閉">×</button>';
+  h+='<h2 id="ptitle">'+esc(s['序列標題'])+'</h2>';
+  h+='<div class="tools"><div class="tl"><span class="lbl">'+esc(tu)+'</span><span class="seg" role="group" aria-label="'+esc(tu)+'（可多選）">'+yearPills(b['年度清單'])+'</span></div>';
+  if(b['學制選項'].length>1){
+    h+='<div class="tl"><span class="lbl">學制</span><span class="seg" role="group" aria-label="學制">'+b['學制選項'].map(function(d){
+      return '<button type="button" class="pill'+(d===s['學制']?' on':'')+'" data-d="'+esc(d)+'" aria-pressed="'+(d===s['學制'])+'">'+esc(d)+'</button>';
+    }).join('')+'</span></div>';
+  }
+  h+='</div>';
+  if(tu==='年度') h+='<div class="tnote">年度與學年度為不同時間概念：本指標為年度（平台每年 3 月統計前一年度資料）。</div>';
+  var anyFirst=s['年度資料'].some(function(r){return years.indexOf(r['學年度'])>=0&&r['狀態']==='有資料'&&r['本校第1名'];});
+  h+='<div class="upper"><div class="cards"><div class="cmp-h">與前1名比較</div><div class="cmp-head"><span>'+esc(tu)+'</span><span>'+(anyFirst?'前(後)1名':'前1名')+'</span><span>差距</span></div>'+desc.map(function(y){return cardHTML(y,yd(s,y),unit);}).join('')+'</div>';
+  h+='<div class="chartwrap"><div class="legend"><span><i style="background:'+C_TH+'"></i>'+esc(TH)+'數值</span><span><i style="background:'+C_1+'"></i>'+(anyFirst?'前1名（本校第 1 名時為後1名）':'前1名')+'學校數值（標示校名）</span></div><div class="chart"></div></div></div>';
+  h+='<div class="tbl">'+tableHTML(s,years,b['單位'],tu)+'</div>';
+  h+='<div class="foot">'+footHTML(b,years)+'</div>';
+  return h;
+}
+
+function drawChart(el,force){
+  var b=BYID[openId]; if(!b) return;
+  var W=Math.max(240,Math.round(el.clientWidth||400));
+  if(!force && el._w===W) return;
+  el._w=W;
+  el.innerHTML=chartSVG(seriesOf(b),blockYears(b),b['單位'],W,tuOf(b));
+}
+function drawCharts(){
+  Array.prototype.forEach.call(document.querySelectorAll('#panel .chart'),function(el){
+    drawChart(el,true);
+    if(window.ResizeObserver && !el._ro){ el._ro=new ResizeObserver(function(){drawChart(el,false);}); el._ro.observe(el); }
+  });
+}
+
+var ov=document.getElementById('ov'), panel=document.getElementById('panel');
+function renderPanel(keepFocus){
+  var b=BYID[openId]; if(!b) return;
+  var ae=document.activeElement, key=null;
+  if(keepFocus&&ae&&panel.contains(ae)){ key=ae.getAttribute('data-y')?'data-y':(ae.getAttribute('data-d')?'data-d':null); if(key) key=[key,ae.getAttribute(key)]; }
+  var st=ov.scrollTop;
+  panel.innerHTML=panelHTML(b);
+  drawCharts();
+  ov.scrollTop=st;
+  if(key){ var n=panel.querySelector('['+key[0]+'="'+key[1]+'"]'); if(n) n.focus({preventScroll:true}); }
+}
+function openPanel(id){
+  openId=id; lastFocus=document.activeElement;
+  renderPanel(false);
+  ov.hidden=false; ov.scrollTop=0;
+  document.documentElement.classList.add('lock');
+  requestAnimationFrame(function(){ov.classList.add('show'); drawCharts();});
+  var c=panel.querySelector('.close'); if(c) c.focus({preventScroll:true});
+}
+function closePanel(){
+  if(openId===null) return;
+  var closedId=openId;
+  openId=null; ov.classList.remove('show');
+  document.documentElement.classList.remove('lock');
+  setTimeout(function(){ if(openId===null){ ov.hidden=true; panel.innerHTML=''; } },220);
+  /* 總覽可能已因年度切換而重畫，原卡片元素已不存在，改用區塊編號重新找卡片 */
+  var back=document.querySelector('.oc[data-open="'+closedId+'"]')||lastFocus;
+  if(back&&back.focus) back.focus({preventScroll:true});
+}
+function renderAll(){
+  document.getElementById('yearbtns').innerHTML=yearPills();
+  renderOverview();
+  if(openId!==null) renderPanel(true);
+}
+
+document.addEventListener('click',function(e){
+  var t=e.target.closest?e.target.closest('[data-open],[data-y],[data-d],[data-close]'):null;
+  if(t){
+    if(t.hasAttribute('data-open')){ openPanel(t.getAttribute('data-open')); return; }
+    if(t.hasAttribute('data-close')){ closePanel(); return; }
+    if(t.hasAttribute('data-y')){
+      var y=Number(t.getAttribute('data-y'));
+      if(sel[y] && selYears().length===1) return; /* 至少保留一個學年度 */
+      sel[y]=!sel[y];
+      var wasPanel=panel.contains(t);
+      renderAll();
+      if(!wasPanel){ var nb=document.querySelector('#yearbtns [data-y="'+y+'"]'); if(nb) nb.focus({preventScroll:true}); }
+      return;
+    }
+    if(t.hasAttribute('data-d')){ deg[openId]=t.getAttribute('data-d'); renderPanel(true); return; }
+  }
+  if(e.target===ov) closePanel();
+});
+document.addEventListener('keydown',function(e){
+  if(openId===null) return;
+  if(e.key==='Escape'||e.key==='Esc'){ e.preventDefault(); closePanel(); return; }
+  if(e.key==='Tab'){
+    var f=[].slice.call(panel.querySelectorAll('button:not([disabled])'));
+    if(!f.length) return;
+    var first=f[0], last=f[f.length-1];
+    if(!panel.contains(document.activeElement)){ e.preventDefault(); first.focus(); }
+    else if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+});
+renderAll();
+var tm=null; window.addEventListener('resize',function(){clearTimeout(tm); tm=setTimeout(function(){if(openId!==null)drawCharts();},80);});
+})();
+</script>
+</body>
+</html>
+
+</body></html>
