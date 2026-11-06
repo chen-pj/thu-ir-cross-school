@@ -1,5 +1,6 @@
 # 發布到 GitHub Pages。刻意只允許手動觸發：
 # 需先在 Settings → Pages 把 Source 設為 "GitHub Actions"，再到 Actions 頁按 Run workflow。
+# 發布分支：claude/main（預設分支）。
 name: Deploy dashboard to Pages
 
 on:
