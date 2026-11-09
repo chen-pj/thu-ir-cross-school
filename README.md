@@ -13,7 +13,7 @@
 | `tools/fetch.py` | 下載平台報表到 `data/raw/<年>/`（不進版控） |
 | `tools/compute.py` | 依口徑把 `data/raw/<年>/` 算成 `data/dashboard.json` |
 | `tools/build.py` | 產生 `dist/index.html` |
-| `.github/workflows/pages.yml` | 發布到 GitHub Pages（僅手動觸發） |
+| `.github/workflows/pages.yml` | 發布到 GitHub Pages（推送到 claude/main 自動發布，也可手動重跑） |
 
 ## 這個工具做什麼、不做什麼
 
@@ -23,7 +23,7 @@
 
 ## 每年更新
 
-流程：fetch → compute → build → 人工檢查 → 手動發布（不做自動排程）。
+流程：fetch → compute → build → 人工檢查 → commit 並推送（推送到 claude/main 就會自動發布，推送前請確認）。
 
 ```bash
 python tools/fetch.py --folder 115
@@ -61,4 +61,8 @@ Windows 請把 `python3` 改成 `python`。也可以直接用瀏覽器開啟 `di
 ## 注意
 
 - 只放公開平台資料；校內資料不得放入本儲存庫。
-- GitHub Pages 網站本身是公開的（即使儲存庫為私人），發布前請確認。
+- GitHub Pages 網站本身是公開的（即使儲存庫為私人），推送前請確認。
+- 交付的網頁不放內部編號（B01～B17、口徑決策編號），`build.py` 會檢查。
+- `data/raw/` 不進版控；原始報表由 `fetch.py` 下載到本機。`fetch.py` 尚未實際連線測試過，第一次使用時請留意輸出。
+- 計算方式整理自校務研究組原始專案（`校務研究AgentTeam\專案\115學年度_校務公開資料儀表板`）。
+  原始專案只能讀、不能改；口徑以 `tools/config.py` 與 `data/dashboard.json` 的「口徑摘要」為準。
