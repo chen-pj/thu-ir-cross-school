@@ -7,6 +7,7 @@
 - 文字只改「交互參照內部編號」的一處，口徑與數字不動。
 - 建置時逐值比對：交付檔中每個數值都必須與 data/ 原始值相同，否則中止。
 """
+import base64
 import json
 import re
 import sys
@@ -34,6 +35,27 @@ TEXT_FIX = {
 }
 
 INTERNAL_ID = re.compile(r"(?<![A-Za-z0-9])B\d{2}(?:-\d+)?(?![0-9])")
+
+
+FONT = ROOT / "src" / "fonts" / "noto-sans-tc.woff"
+FONT_CHARS = ROOT / "src" / "fonts" / "noto-sans-tc.chars.txt"
+FONT_PH = "/*__FONT_FACE__*/"
+
+
+def font_face(html):
+    """把 Noto Sans TC 子集嵌入頁面（不連外部資源）；頁面有子集缺的字時提醒重新產生。"""
+    if not FONT.exists():
+        print("[提醒] 找不到 src/fonts/noto-sans-tc.woff，頁面改用系統字型；請執行 tools/subset_font.py")
+        return ""
+    have = set(FONT_CHARS.read_text(encoding="utf8")) if FONT_CHARS.exists() else set()
+    text = re.sub(r"<[^>]*>", "", html)
+    miss = sorted({c for c in text if ord(c) > 0x2E7F and c not in have})
+    if miss:
+        print(f"[提醒] 字型子集缺 {len(miss)} 字（會用系統字型顯示）：{''.join(miss[:40])}"
+              "；請執行 python tools/subset_font.py 後重新建置")
+    b64 = base64.b64encode(FONT.read_bytes()).decode("ascii")
+    return ("@font-face{font-family:\"Noto Sans TC Web\";font-weight:100 900;font-display:swap;"
+            f"src:url(data:font/woff;base64,{b64}) format(\"woff\")}}")
 
 
 def pick(d, keys):
@@ -96,16 +118,18 @@ def main():
         if "</" in s:
             sys.exit(f"{name} 含有 '</'，不能直接嵌入 <script>")
     html = SRC.read_text(encoding="utf8")
-    for ph in ("__DATA__", "__NOTES__"):
+    for ph in ("__DATA__", "__NOTES__", FONT_PH):
         if html.count(ph) != 1:
             sys.exit(f"範本中 {ph} 應恰好出現一次")
     html = html.replace("__DATA__", data_s).replace("__NOTES__", notes_s)
 
+    # 先檢查頁面本身，再嵌入字型（字型的 base64 會碰巧出現像 B04 的字串）
     leaks = sorted(set(INTERNAL_ID.findall(html)))
     if leaks:
         sys.exit(f"交付檔仍含內部編號：{leaks}")
-    if re.search(r"<script[^>]+src=|https?://(?!udb\.moe\.edu\.tw)", html):
+    if re.search(r"<script[^>]+src=|https?://(?!udb\.moe\.edu\.tw)|url\((?!data:)", html):
         sys.exit("交付檔含外部資源請求")
+    html = html.replace(FONT_PH, font_face(html))
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(html, encoding="utf8")

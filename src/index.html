@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#1E7E34">
 <title>校務公開資料儀表板：校際比較</title>
 <style>
+/*__FONT_FACE__*/
 :root{
   --th:#118DFF;      /* 本校：舊版截圖取色 */
   --c1:#FF7F0E;      /* 前1名 */
@@ -22,7 +23,7 @@
   --h4:#0E6E78;      /* 國際化 */
   --h5:#8A3A5C;      /* 研發 */
   --h6:#56625B;      /* 其他 */
-  --bg:#F2F4F0;--card:#fff;--text:#1E2622;--sub:#5B6660;--line:#E1E5E0;
+  --bg:#F2F4F0;--card:#fff;--text:#1E2622;--sub:#454F49;--line:#E1E5E0;
   --radius:18px;--shadow:0 1px 2px rgba(30,52,38,.06),0 4px 14px rgba(30,52,38,.06);
 }
 [data-hue="1"]{--gc:var(--h1)} [data-hue="2"]{--gc:var(--h2)} [data-hue="3"]{--gc:var(--h3)}
@@ -31,7 +32,7 @@
 html,body{margin:0;padding:0}
 html{overflow-x:hidden;scroll-padding-top:var(--barh,70px)}   /* overflow 只放在 html：body 也設會讓 position:sticky 失效；scroll-padding 讓鍵盤焦點不被黏頂列蓋住 */
 html.lock{overflow:hidden}
-body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro TC","SF Pro Text","PingFang TC","Microsoft JhengHei","微軟正黑體","Noto Sans TC",sans-serif;color:var(--text);background:var(--bg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{font-family:"Noto Sans TC Web","Noto Sans TC","PingFang TC","Microsoft JhengHei","微軟正黑體",sans-serif;color:var(--text);background:var(--bg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 button{font-family:inherit;color:inherit;touch-action:manipulation}
 .skip{position:absolute;left:16px;top:-60px;z-index:30;padding:10px 16px;border-radius:10px;background:#fff;color:var(--g);font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(30,52,38,.2);transition:top .15s ease}
 .skip:focus{top:12px}
@@ -48,14 +49,14 @@ button{font-family:inherit;color:inherit;touch-action:manipulation}
 .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:17px;font-weight:700;letter-spacing:2px;color:var(--band)}
 .eyebrow::before{content:"";width:28px;height:4px;border-radius:2px;background:var(--band)}
 .hero h1{margin:12px 0 0;font-size:56px;line-height:1.1;letter-spacing:3px;font-weight:900}
-.hero .intro{margin:16px 0 0;max-width:34em;font-size:18px;line-height:1.75;color:rgba(255,255,255,.9)}
+.hero .intro{margin:16px 0 0;max-width:34em;font-size:18px;line-height:1.75;color:#fff}
 .kpis{display:flex;flex-wrap:wrap;margin:30px 0 0;padding:0}
 .kpi{margin:0;padding:2px 32px 2px 0}
 .kpi+.kpi{padding-left:32px;border-left:1px solid rgba(255,255,255,.28)}
-.kpi dt{font-size:14px;color:rgba(255,255,255,.78)}
+.kpi dt{font-size:14px;color:rgba(255,255,255,.9)}
 .kpi dd{margin:2px 0 0;font-size:34px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums;white-space:nowrap}
-.kpi dd small{font-size:16px;font-weight:700;margin-left:3px;color:rgba(255,255,255,.85)}
-.src{margin-top:22px;font-size:14px;color:rgba(255,255,255,.75)}
+.kpi dd small{font-size:16px;font-weight:700;margin-left:3px;color:#fff}
+.src{margin-top:22px;font-size:14px;color:rgba(255,255,255,.88)}
 .src span{display:inline-block}
 .strip{position:relative;display:flex;height:8px}
 .strip span{display:block;height:100%;background:var(--gc)}
@@ -66,7 +67,7 @@ button{font-family:inherit;color:inherit;touch-action:manipulation}
 .brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px;letter-spacing:1px;color:var(--g);text-decoration:none;white-space:nowrap;max-width:0;opacity:0;overflow:hidden;transition:max-width .25s ease,opacity .2s ease}
 .brand::before{content:"";flex:none;width:12px;height:12px;border-radius:3px;background:var(--g);box-shadow:4px 4px 0 var(--band)}
 .bar.stuck .brand{max-width:260px;opacity:1}
-.tabs{display:flex;gap:4px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs{display:flex;gap:4px;flex:0 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .tabs::-webkit-scrollbar{display:none}
 .tab{position:relative;flex:none;display:flex;align-items:center;gap:8px;padding:20px 12px;font-size:17px;font-weight:700;color:var(--sub);text-decoration:none;white-space:nowrap;transition:color .18s ease}
 .tab::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--gc);opacity:.55;transition:opacity .18s ease}
@@ -76,14 +77,24 @@ button{font-family:inherit;color:inherit;touch-action:manipulation}
 .tab.on{color:var(--gc)}
 .tab.on::after{transform:scaleX(1)}
 .tab:focus-visible,.brand:focus-visible{outline:3px solid rgba(30,126,52,.45);outline-offset:-3px;border-radius:6px}
-.yrs{display:flex;align-items:center;gap:12px;flex:none}
+.yrs{display:flex;align-items:center;gap:12px;flex:none;margin-left:auto}
 .bar .lbl{font-weight:700;font-size:15px;color:var(--sub);white-space:nowrap}
-/* ---------- 使用說明 ---------- */
-.guide{display:grid;grid-template-columns:auto 1fr;gap:6px 28px;align-items:start;margin:28px 0 0;padding:20px 24px;background:#fff;border-radius:var(--radius);border-left:6px solid var(--band);box-shadow:var(--shadow)}
-.guide h2{margin:0;padding-top:2px;font-size:18px;font-weight:800;color:var(--g);white-space:nowrap}
-.guide ul{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 28px;margin:0;padding:0;list-style:none}
-.guide li{font-size:15px;line-height:1.7;color:var(--text)}
-.guide li b{display:block;margin-bottom:2px;font-size:14px;font-weight:800;color:var(--g-deep)}
+/* ---------- 使用說明（導覽列 i 按鈕） ---------- */
+.info{flex:none;display:flex;align-items:center;gap:7px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;background:#fff;font-size:16px;font-weight:700;color:var(--g-deep);cursor:pointer;transition:background .18s ease,border-color .18s ease}
+.info svg{width:20px;height:20px;flex:none}
+.info:hover,.info[aria-expanded="true"]{background:var(--g-l);border-color:var(--g)}
+.info:focus-visible{outline:3px solid rgba(30,126,52,.45);outline-offset:2px}
+.guide{position:absolute;left:0;right:0;top:100%;z-index:6}
+.guide[hidden]{display:none}
+.guide-in{position:relative;margin-top:10px;padding:22px 56px 22px 26px;background:#fff;border-radius:var(--radius);border-top:5px solid var(--band);box-shadow:0 2px 6px rgba(30,52,38,.08),0 18px 40px rgba(30,52,38,.16)}
+.guide h2{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:20px;font-weight:800;color:var(--g)}
+.guide h2 svg{width:22px;height:22px}
+.guide ul{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 28px;margin:0;padding:0;list-style:none}
+.guide li{font-size:16px;line-height:1.7;color:var(--text)}
+.guide li b{display:block;margin-bottom:2px;font-size:15px;font-weight:800;color:var(--g-deep)}
+.guide .x{position:absolute;top:12px;right:12px;width:36px;height:36px;border:0;border-radius:50%;background:#EEF1ED;font-size:22px;line-height:1;cursor:pointer;color:var(--text)}
+.guide .x:hover{background:var(--g-l)}
+.guide .x:focus-visible{outline:3px solid rgba(30,126,52,.45);outline-offset:2px}
 .seg{display:inline-flex;gap:8px;flex-wrap:wrap}
 .pill{border:1.5px solid var(--g);background:#fff;font-size:16px;font-weight:700;padding:5px 18px;border-radius:999px;cursor:pointer;color:var(--g);font-variant-numeric:tabular-nums;transition:background .18s ease,color .18s ease,box-shadow .18s ease,transform .12s ease}
 .pill:hover{background:var(--g-l)}
@@ -107,16 +118,18 @@ button{font-family:inherit;color:inherit;touch-action:manipulation}
 .oc-val b{font-size:38px;line-height:1.15;color:var(--text);font-weight:800;font-variant-numeric:tabular-nums}
 .oc-val b.long{font-size:30px}
 .oc-val b.xl{font-size:25px}
+.oc-val b .u{margin-left:2px}
 .oc-val small{font-size:14px;color:var(--sub)}
 .oc-rank{margin-top:2px;font-size:16px;color:var(--sub)}
 .oc-rank b{color:var(--text);font-variant-numeric:tabular-nums}
 .badge{display:inline-block;margin-left:6px;font-size:13px;font-weight:700;color:#fff;background:var(--g);border-radius:999px;padding:0 9px}
 .spark{display:block;width:100%;height:auto;margin:10px 0 0}
 .spark-x{display:flex;justify-content:space-between;font-size:13px;color:var(--sub)}
-.oc-gap{margin-top:8px;font-size:15px;overflow-wrap:anywhere}
+.oc-gap{margin-top:10px;font-size:15px;line-height:1.55;overflow-wrap:anywhere}
+.oc-gap div+div{margin-top:2px}
 .oc-gap b{font-variant-numeric:tabular-nums}
 .oc-gap .cmp{color:var(--navy);font-weight:700}
-.oc-more{margin-top:10px;font-size:14px;font-weight:700;color:var(--gc,var(--g))}
+.oc-more{margin-top:auto;padding-top:14px;font-size:14px;font-weight:700;color:var(--gc,var(--g))}
 .oc-nodata{margin-top:14px;color:var(--sub)}
 #main:focus{outline:none}
 /* ---------- 回到頁首 ---------- */
@@ -184,11 +197,12 @@ footer.page{padding:40px 0 110px;font-size:14px;color:var(--sub)}
   .brand,.bar.stuck .brand{display:none}
   .tabs{order:2;flex:1 0 100%;margin:0 -12px;padding:0 6px;border-top:1px solid var(--line)}
   .tab{padding:13px 12px}
-  .yrs{padding:10px 0}
+  .yrs{padding:10px 0;margin-left:0}
+  .info{order:1;margin-left:auto}
 }
 @media (max-width:900px){
-  .guide{grid-template-columns:1fr;padding:18px 20px}
   .guide ul{grid-template-columns:1fr}
+  .guide-in{padding:18px 52px 18px 20px}
   .hero h1{font-size:44px}
   .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 0}
   .kpi:nth-child(odd){padding-left:0;border-left:0}
@@ -209,6 +223,9 @@ footer.page{padding:40px 0 110px;font-size:14px;color:var(--sub)}
   .kpi dd{font-size:26px}
   .kpi dd small{font-size:14px}
   .bar .lbl{display:none}
+  .info{padding:8px;border-radius:50%}
+  .info svg{width:22px;height:22px}
+  .info-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .pill{padding:5px 15px}
   .tabs{margin:0 -8px}
   .tab{font-size:16px;padding:12px 10px}
@@ -250,17 +267,20 @@ footer.page{padding:40px 0 110px;font-size:14px;color:var(--sub)}
 <nav class="bar" id="bar" aria-label="頁面導覽"><div class="wrap bar-in">
   <a class="brand" href="#top">校務公開資料儀表板</a>
   <div class="tabs" id="tabs"></div>
+  <button type="button" class="info" id="infobtn" aria-expanded="false" aria-controls="guide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6" fill="currentColor"/></svg><span class="info-t">使用說明</span></button>
   <div class="yrs"><span class="lbl">學年度／年度</span><span class="seg" id="yearbtns" role="group" aria-label="學年度或年度（可多選）"></span></div>
-</div></nav>
-<div class="wrap">
-  <section class="guide" aria-labelledby="guide-h">
-    <h2 id="guide-h">使用說明</h2>
+</div>
+  <div class="guide" id="guide" role="region" aria-labelledby="guide-h" hidden><div class="wrap"><div class="guide-in">
+    <h2 id="guide-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6" fill="currentColor"/></svg>使用說明</h2>
     <ul>
       <li><b>這是什麼</b>用教育部公開統計，比較東海大學與全國一般大學在招生、學生表現、國際化、研發等指標的名次。</li>
       <li><b>怎麼選</b>在上方選學年度（可多選；研發類以「年度」計），再點分組頁籤跳到想看的類別。</li>
       <li><b>怎麼看</b>點任一指標卡片，可看各年度名次、折線圖，以及名次在東海前面、最接近的 3 所學校。</li>
     </ul>
-  </section>
+    <button type="button" class="x" id="guidex" aria-label="關閉使用說明">×</button>
+  </div></div></div>
+</nav>
+<div class="wrap">
   <main id="main" tabindex="-1"></main>
   <footer class="page">資料為教育部「大學校院校務資訊公開平台」公開統計；名次與差距描述數字位置，不代表表現優劣或因果；全校結果不推論到個別學系。</footer>
 </div>
@@ -290,11 +310,12 @@ function fmt(v){
 }
 function fmt2(v){var n=Math.round(Number(v)*100)/100; if(n===0) n=0; return n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fmtv(v,unit){if(v===null||v===undefined) return '—'; return unit==='%'?fmt2(v)+'%':fmt(v);}
-function gapUnit(unit){return unit==='%'?'百分點':unit;}
+function gapUnit(unit){return unit;}
 function tuOf(b){return b['時間單位']||'學年度';}
 function blockYears(b){var tl=b['年度清單']||YEARS; var y=selYears().filter(function(v){return tl.indexOf(v)>=0;}); return y.length?y:selYears();}
-function gapText(t){return String(t==null?'':t).replace(/(\d+(?:\.\d+)?)(人次|人|百分點)/g,function(m,n,u){return fmt(Number(n))+' '+u;});}
+function gapText(t){return String(t==null?'':t).replace(/(\d+(?:\.\d+)?) ?(人次|人|百分點)/g,function(m,n,u){return u==='百分點'?fmt2(Number(n))+'%':fmt(Number(n))+' '+u;});}
 function fmtgap(v,unit){if(v===null||v===undefined) return '—'; return (v>0?'+':'')+(unit==='%'?fmt2(v):fmt(v));}
+function gapWithUnit(v,unit){var t=fmtgap(v,unit); return t==='—'?t:(unit==='%'?t+'%':t+' '+unit);}
 function selYears(){return YEARS.filter(function(y){return sel[y];});}
 function descYears(){return selYears().sort(function(a,b){return b-a;});}
 
@@ -344,14 +365,14 @@ function ocHTML(b){
   h+='<div class="oc-h"><span class="oc-name">'+esc(b['指標'])+'</span><span class="oc-deg">'+esc(s['學制'])+'</span></div>';
   if(!r){ return h+'<div class="oc-nodata">所選年度無資料</div></button>'; }
   var c=r['卡片'], first=r['本校第1名'];
-  var vt=fmtv(r['本校數值'],unit);
-  h+='<div class="oc-val"><b'+(vt.length>12?' class="xl"':(vt.length>8?' class="long"':''))+'>'+esc(vt)+'</b><small>'+(unit==='%'?'':esc(unit)+' · ')+esc(ry)+' '+esc(tu)+'</small></div>';
+  var vt=fmtv(r['本校數值'],unit), un=unit==='%'?'':unit, len=vt.length+un.length;
+  h+='<div class="oc-val"><b'+(len>12?' class="xl"':(len>8?' class="long"':''))+'>'+esc(vt)+(un?'<span class="u">'+esc(un)+'</span>':'')+'</b><small>'+esc(ry)+' '+esc(tu)+'</small></div>';
   h+='<div class="oc-rank">名次 <b>'+esc(r['本校名次'])+'／'+esc(r['母體校數'])+'</b>'+(first?'<span class="badge">第 1 名</span>':'')+'</div>';
   var vals=[], yrs=[];
   blockYears(b).sort(function(a,c){return a-c;}).forEach(function(y){var q=yd(s,y); if(q&&q['狀態']==='有資料'){vals.push(q['本校數值']);yrs.push(y);}});
   h+=sparkSVG(vals);
   if(yrs.length) h+='<div class="spark-x"><span>'+yrs[0]+'</span><span>'+(yrs.length>1?yrs[yrs.length-1]:'')+'</span></div>';
-  h+='<div class="oc-gap">與'+esc(c['比較標籤'])+'差距 <b>'+esc(fmtgap(c['差距'],unit))+' '+esc(gapUnit(unit))+'</b> <span class="cmp">'+esc(c['比較學校名稱'])+'</span></div>';
+  h+='<div class="oc-gap"><div>與'+esc(c['比較標籤'])+' <span class="cmp">'+esc(c['比較學校名稱'])+'</span></div><div>差距 <b>'+esc(gapWithUnit(c['差距'],unit))+'</b></div></div>';
   return h+'<div class="oc-more">查看詳細內容 ›</div></button>';
 }
 function renderOverview(){
@@ -402,10 +423,23 @@ function spy(){
     }
   });
 }
+/* ---------- 使用說明：第一次來自動打開，之後點 i 按鈕開關 ---------- */
+var guide=document.getElementById('guide'), infobtn=document.getElementById('infobtn');
+function setGuide(open,focus){
+  guide.hidden=!open; infobtn.setAttribute('aria-expanded',String(open)); barH();
+  if(open&&focus) document.getElementById('guidex').focus({preventScroll:true});
+  if(!open){ try{ localStorage.setItem('guideSeen','1'); }catch(_){} if(focus) infobtn.focus({preventScroll:true}); }
+}
+infobtn.addEventListener('click',function(){ setGuide(guide.hidden,true); });
+document.getElementById('guidex').addEventListener('click',function(){ setGuide(false,true); });
+document.addEventListener('keydown',function(e){ if((e.key==='Escape'||e.key==='Esc')&&!guide.hidden&&openId===null){ setGuide(false,true); } });
+document.addEventListener('click',function(e){ if(!guide.hidden&&!guide.contains(e.target)&&!infobtn.contains(e.target)) setGuide(false,false); });
+(function(){ var seen=false; try{ seen=localStorage.getItem('guideSeen')==='1'; }catch(_){} if(!seen) setGuide(true,false); })();
+
 var spyRaf=0;
 window.addEventListener('scroll',function(){ if(!spyRaf) spyRaf=requestAnimationFrame(function(){spyRaf=0;spy();}); },{passive:true});
 document.addEventListener('click',function(e){
-  var a=e.target.closest?e.target.closest('#tabs .tab,.brand'):null;
+  var a=e.target.closest?e.target.closest('#tabs a.tab,a.brand'):null;
   if(!a) return;
   var id=a.getAttribute('href').slice(1), el=document.getElementById(id);
   if(!el) return;
@@ -421,12 +455,12 @@ function cardHTML(y,r,unit){
   if(!r||r['狀態']!=='有資料'){
     return '<div class="cmp-row"><span class="cmp-y">'+y+'</span><span class="cmp-nd">無資料</span></div>';
   }
-  /* 每年度一列：年度｜前1名校名｜差距（含單位；單位由區塊單位決定，百分比類為百分點） */
+  /* 每年度一列：年度｜前1名校名｜差距（含單位） */
   var c=r['卡片'], first=r['本校第1名'];
-  var gu=' '+gapUnit(unit);
+  /* 差距單位：百分比類顯示 %（數值為百分點差） */
   var h='<div class="cmp-row"><span class="cmp-y">'+esc(c['學年度'])+'</span><span class="cmp-s">';
   if(first) h+='<span class="me">'+esc(c['主文字'])+(r['並列學校數']>0?'（與 '+esc(r['並列學校數'])+' 校並列）':'')+'</span>'+esc(c['比較標籤'])+' ';
-  h+=esc(c['比較學校名稱'])+'</span><span class="cmp-gap">'+esc(fmtgap(c['差距'],unit))+gu+'</span></div>';
+  h+=esc(c['比較學校名稱'])+'</span><span class="cmp-gap">'+esc(gapWithUnit(c['差距'],unit))+'</span></div>';
   return h;
 }
 
