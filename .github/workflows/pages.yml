@@ -1,9 +1,11 @@
-# 發布到 GitHub Pages。刻意只允許手動觸發：
-# 需先在 Settings → Pages 把 Source 設為 "GitHub Actions"，再到 Actions 頁按 Run workflow。
-# 發布分支：claude/main（預設分支）。
+# 發布到 GitHub Pages：推送到 claude/main 就自動發布；也可以到 Actions 頁按 Run workflow 手動重跑。
+# 需先在 Settings → Pages 把 Source 設為 "GitHub Actions"。
+# 建置時 build.py 會逐值驗證資料、檢查內部編號與外部請求，任何一項不通過就不會發布。
 name: Deploy dashboard to Pages
 
 on:
+  push:
+    branches: [claude/main]
   workflow_dispatch:
 
 permissions:
