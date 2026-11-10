@@ -64,9 +64,6 @@ button{font-family:inherit;color:inherit;touch-action:manipulation}
 .bar{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.9);-webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);border-bottom:1px solid var(--line);transition:box-shadow .2s ease}
 .bar.stuck{box-shadow:0 6px 20px rgba(30,52,38,.08)}
 .bar-in{display:flex;align-items:center;gap:20px;min-height:66px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px;letter-spacing:1px;color:var(--g);text-decoration:none;white-space:nowrap;max-width:0;opacity:0;overflow:hidden;transition:max-width .25s ease,opacity .2s ease}
-.brand::before{content:"";flex:none;width:12px;height:12px;border-radius:3px;background:var(--g);box-shadow:4px 4px 0 var(--band)}
-.bar.stuck .brand{max-width:260px;opacity:1}
 .tabs{display:flex;gap:4px;flex:0 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .tabs::-webkit-scrollbar{display:none}
 .tab{position:relative;flex:none;display:flex;align-items:center;gap:8px;padding:20px 12px;font-size:17px;font-weight:700;color:var(--sub);text-decoration:none;white-space:nowrap;transition:color .18s ease}
@@ -76,25 +73,35 @@ button{font-family:inherit;color:inherit;touch-action:manipulation}
 .tab:hover::before,.tab.on::before{opacity:1}
 .tab.on{color:var(--gc)}
 .tab.on::after{transform:scaleX(1)}
-.tab:focus-visible,.brand:focus-visible{outline:3px solid rgba(30,126,52,.45);outline-offset:-3px;border-radius:6px}
+.tab:focus-visible{outline:3px solid rgba(30,126,52,.45);outline-offset:-3px;border-radius:6px}
 .yrs{display:flex;align-items:center;gap:12px;flex:none;margin-left:auto}
 .bar .lbl{font-weight:700;font-size:15px;color:var(--sub);white-space:nowrap}
-/* ---------- 使用說明（導覽列 i 按鈕） ---------- */
+/* ---------- 使用說明（導覽列 i 按鈕 → 三頁彈出視窗） ---------- */
 .info{flex:none;display:flex;align-items:center;gap:7px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;background:#fff;font-size:16px;font-weight:700;color:var(--g-deep);cursor:pointer;transition:background .18s ease,border-color .18s ease}
 .info svg{width:20px;height:20px;flex:none}
-.info:hover,.info[aria-expanded="true"]{background:var(--g-l);border-color:var(--g)}
+.info:hover{background:var(--g-l);border-color:var(--g)}
 .info:focus-visible{outline:3px solid rgba(30,126,52,.45);outline-offset:2px}
-.guide{position:absolute;left:0;right:0;top:100%;z-index:6}
-.guide[hidden]{display:none}
-.guide-in{position:relative;margin-top:10px;padding:22px 56px 22px 26px;background:#fff;border-radius:var(--radius);border-top:5px solid var(--band);box-shadow:0 2px 6px rgba(30,52,38,.08),0 18px 40px rgba(30,52,38,.16)}
-.guide h2{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:20px;font-weight:800;color:var(--g)}
-.guide h2 svg{width:22px;height:22px}
-.guide ul{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 28px;margin:0;padding:0;list-style:none}
-.guide li{font-size:16px;line-height:1.7;color:var(--text)}
-.guide li b{display:block;margin-bottom:2px;font-size:15px;font-weight:800;color:var(--g-deep)}
-.guide .x{position:absolute;top:12px;right:12px;width:36px;height:36px;border:0;border-radius:50%;background:#EEF1ED;font-size:22px;line-height:1;cursor:pointer;color:var(--text)}
-.guide .x:hover{background:var(--g-l)}
-.guide .x:focus-visible{outline:3px solid rgba(30,126,52,.45);outline-offset:2px}
+.tour{width:min(520px,calc(100vw - 32px));padding:0;border:0;border-radius:22px;background:#fff;color:var(--text);box-shadow:0 24px 70px rgba(15,40,25,.35);overflow:hidden}
+.tour::backdrop{background:rgba(20,35,26,.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.tour-art{position:relative;height:190px;background:linear-gradient(160deg,#1E7E34 0%,#145F28 55%,var(--g-deep) 100%);display:grid;place-items:center}
+.tour-art svg{width:300px;max-width:84%;height:auto}
+.tour-body{padding:22px 28px 6px;min-height:176px}
+.tour-step{margin:0;font-size:14px;font-weight:700;color:var(--g);font-variant-numeric:tabular-nums}
+.tour-body h2{margin:4px 0 8px;font-size:24px;font-weight:800;letter-spacing:1px;text-wrap:balance}
+.tour-body p.t{margin:0;font-size:17px;line-height:1.75}
+.tour-nav{display:flex;align-items:center;gap:10px;padding:14px 28px 22px}
+.dots{display:flex;gap:8px;margin-right:auto}
+.dots span{width:9px;height:9px;border-radius:50%;background:#D5DBD6;transition:width .2s ease,background .2s ease}
+.dots span.on{width:26px;border-radius:5px;background:var(--g)}
+.tbtn{border:1.5px solid var(--g);border-radius:999px;padding:8px 20px;font-size:16px;font-weight:700;cursor:pointer;background:#fff;color:var(--g);transition:background .18s ease,transform .12s ease}
+.tbtn:hover{background:var(--g-l)}
+.tbtn.pri{background:var(--g);color:#fff}
+.tbtn.pri:hover{background:var(--g-deep)}
+.tbtn:active{transform:scale(.96)}
+.tbtn[hidden]{display:none}
+.tbtn:focus-visible,.tour .x:focus-visible{outline:3px solid rgba(30,126,52,.45);outline-offset:2px}
+.tour .x{position:absolute;top:12px;right:12px;z-index:1;width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:24px;line-height:1;cursor:pointer}
+.tour .x:hover{background:rgba(255,255,255,.3)}
 .seg{display:inline-flex;gap:8px;flex-wrap:wrap}
 .pill{border:1.5px solid var(--g);background:#fff;font-size:16px;font-weight:700;padding:5px 18px;border-radius:999px;cursor:pointer;color:var(--g);font-variant-numeric:tabular-nums;transition:background .18s ease,color .18s ease,box-shadow .18s ease,transform .12s ease}
 .pill:hover{background:var(--g-l)}
@@ -108,18 +115,18 @@ button{font-family:inherit;color:inherit;touch-action:manipulation}
 .grp h2{display:flex;align-items:center;gap:12px;margin:0 0 18px;padding-bottom:8px;font-size:28px;font-weight:800;letter-spacing:1px;color:var(--gc);border-bottom:2px solid var(--gc)}
 .grp h2::before{content:"";flex:none;width:14px;height:14px;border-radius:4px;background:var(--gc)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
-.oc{display:flex;flex-direction:column;text-align:left;background:var(--card);border:0;border-top:4px solid var(--gc,var(--g));border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px 18px;cursor:pointer;min-width:0;transition:transform .2s ease,box-shadow .2s ease}
+.oc{display:flex;flex-direction:column;align-items:stretch;text-align:left;background:var(--card);border:0;border-top:4px solid var(--gc,var(--g));border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px 18px;cursor:pointer;min-width:0;transition:transform .2s ease,box-shadow .2s ease}
 .oc:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(30,52,38,.06),0 12px 28px rgba(30,52,38,.12)}
 .oc:active{transform:scale(.985)}
 .oc-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .oc-name{font-size:19px;font-weight:700;overflow-wrap:anywhere}
 .oc-deg{font-size:13px;color:var(--sub);background:#EEF1ED;border-radius:999px;padding:1px 10px;white-space:nowrap}
-.oc-val{margin-top:10px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.oc-val{margin-top:12px;align-self:end}
 .oc-val b{font-size:38px;line-height:1.15;color:var(--text);font-weight:800;font-variant-numeric:tabular-nums}
 .oc-val b.long{font-size:30px}
 .oc-val b.xl{font-size:25px}
 .oc-val b .u{margin-left:2px}
-.oc-val small{font-size:14px;color:var(--sub)}
+.oc-yr{font-size:14px;color:var(--sub)}
 .oc-rank{margin-top:2px;font-size:16px;color:var(--sub)}
 .oc-rank b{color:var(--text);font-variant-numeric:tabular-nums}
 .badge{display:inline-block;margin-left:6px;font-size:13px;font-weight:700;color:#fff;background:var(--g);border-radius:999px;padding:0 9px}
@@ -129,8 +136,14 @@ button{font-family:inherit;color:inherit;touch-action:manipulation}
 .oc-gap div+div{margin-top:2px}
 .oc-gap b{font-variant-numeric:tabular-nums}
 .oc-gap .cmp{color:var(--navy);font-weight:700}
-.oc-more{margin-top:auto;padding-top:14px;font-size:14px;font-weight:700;color:var(--gc,var(--g))}
+.oc-more{margin-top:auto;align-self:end;padding-top:14px;font-size:14px;font-weight:700;color:var(--gc,var(--g))}
 .oc-nodata{margin-top:14px;color:var(--sub)}
+.oc-sp{min-height:1px}
+/* 同一列卡片共用列線：標題、數值、名次、折線、差距、查看詳細內容都對齊 */
+@supports (grid-template-rows:subgrid){
+  .oc{display:grid;grid-row:span 8;grid-template-rows:subgrid;row-gap:0}
+  .oc-nodata{grid-row:span 7}
+}
 #main:focus{outline:none}
 /* ---------- 回到頁首 ---------- */
 .totop{position:fixed;right:max(24px,env(safe-area-inset-right));bottom:calc(24px + env(safe-area-inset-bottom));z-index:10;width:56px;height:56px;border:0;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:#fff;background:var(--g-deep);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 8px 22px rgba(15,74,30,.32);opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s,background .18s ease}
@@ -194,15 +207,12 @@ footer.page{padding:40px 0 110px;font-size:14px;color:var(--sub)}
 @media (max-width:1180px){
   .hero-art{display:none}
   .bar-in{flex-wrap:wrap;gap:0 16px;min-height:0}
-  .brand,.bar.stuck .brand{display:none}
   .tabs{order:2;flex:1 0 100%;margin:0 -12px;padding:0 6px;border-top:1px solid var(--line)}
   .tab{padding:13px 12px}
   .yrs{padding:10px 0;margin-left:0}
   .info{order:1;margin-left:auto}
 }
 @media (max-width:900px){
-  .guide ul{grid-template-columns:1fr}
-  .guide-in{padding:18px 52px 18px 20px}
   .hero h1{font-size:44px}
   .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 0}
   .kpi:nth-child(odd){padding-left:0;border-left:0}
@@ -223,6 +233,9 @@ footer.page{padding:40px 0 110px;font-size:14px;color:var(--sub)}
   .kpi dd{font-size:26px}
   .kpi dd small{font-size:14px}
   .bar .lbl{display:none}
+  .tour-art{height:160px}
+  .tour-body{padding:18px 22px 4px}
+  .tour-nav{padding:12px 22px 18px}
   .info{padding:8px;border-radius:50%}
   .info svg{width:22px;height:22px}
   .info-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -260,30 +273,34 @@ footer.page{padding:40px 0 110px;font-size:14px;color:var(--sub)}
     <h1 tabindex="-1">校務公開資料儀表板</h1>
     <p class="intro">比較學校為各指標、各學年度名次排在東海前面、最接近東海的 3 所一般大學，會隨指標與年度改變。</p>
     <dl class="kpis" id="kpis"></dl>
-    <div class="src"><span id="src"></span>　<span id="upd"></span></div>
+    <div class="src"><span id="src"></span></div>
   </div>
   <div class="strip" id="strip" aria-hidden="true"></div>
 </header>
 <nav class="bar" id="bar" aria-label="頁面導覽"><div class="wrap bar-in">
-  <a class="brand" href="#top">校務公開資料儀表板</a>
   <div class="tabs" id="tabs"></div>
-  <button type="button" class="info" id="infobtn" aria-expanded="false" aria-controls="guide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6" fill="currentColor"/></svg><span class="info-t">使用說明</span></button>
+  <button type="button" class="info" id="infobtn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6" fill="currentColor"/></svg><span class="info-t">使用說明</span></button>
   <div class="yrs"><span class="lbl">學年度／年度</span><span class="seg" id="yearbtns" role="group" aria-label="學年度或年度（可多選）"></span></div>
 </div>
-  <div class="guide" id="guide" role="region" aria-labelledby="guide-h" hidden><div class="wrap"><div class="guide-in">
-    <h2 id="guide-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6" fill="currentColor"/></svg>使用說明</h2>
-    <ul>
-      <li><b>這是什麼</b>用教育部公開統計，比較東海大學與全國一般大學在招生、學生表現、國際化、研發等指標的名次。</li>
-      <li><b>怎麼選</b>在上方選學年度（可多選；研發類以「年度」計），再點分組頁籤跳到想看的類別。</li>
-      <li><b>怎麼看</b>點任一指標卡片，可看各年度名次、折線圖，以及名次在東海前面、最接近的 3 所學校。</li>
-    </ul>
-    <button type="button" class="x" id="guidex" aria-label="關閉使用說明">×</button>
-  </div></div></div>
 </nav>
 <div class="wrap">
   <main id="main" tabindex="-1"></main>
   <footer class="page">資料為教育部「大學校院校務資訊公開平台」公開統計；名次與差距描述數字位置，不代表表現優劣或因果；全校結果不推論到個別學系。</footer>
 </div>
+<dialog class="tour" id="tour" aria-labelledby="tour-h">
+  <div class="tour-art" id="tourArt" aria-hidden="true"></div>
+  <div class="tour-body">
+    <p class="tour-step" id="tourStep"></p>
+    <h2 id="tour-h"></h2>
+    <p class="t" id="tourText"></p>
+  </div>
+  <div class="tour-nav">
+    <div class="dots" id="tourDots" aria-hidden="true"><span></span><span></span><span></span></div>
+    <button type="button" class="tbtn" id="tourPrev">上一步</button>
+    <button type="button" class="tbtn pri" id="tourNext">下一步</button>
+  </div>
+  <button type="button" class="x" id="tourX" aria-label="關閉使用說明">×</button>
+</dialog>
 <button type="button" class="totop" id="totop" aria-label="回到頁首" title="回到頁首"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg></button>
 <div class="ov" id="ov" hidden><div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="ptitle"></div></div>
 
@@ -320,7 +337,6 @@ function selYears(){return YEARS.filter(function(y){return sel[y];});}
 function descYears(){return selYears().sort(function(a,b){return b-a;});}
 
 document.getElementById('src').textContent = '資料來源：' + NOTES['_src'];
-document.getElementById('upd').textContent = '資料更新日期：' + D['資料更新日期'];
 (function(){
   var ly=YEARS[YEARS.length-1], pop=(D['各學年度母體']||{})[String(ly)];
   var k=[];
@@ -364,14 +380,16 @@ function ocHTML(b){
   var h='<button type="button" class="oc" data-open="'+esc(b['區塊編號'])+'" aria-haspopup="dialog" aria-label="'+esc(b['指標'])+'，查看詳細內容">';
   h+='<div class="oc-h"><span class="oc-name">'+esc(b['指標'])+'</span><span class="oc-deg">'+esc(s['學制'])+'</span></div>';
   if(!r){ return h+'<div class="oc-nodata">所選年度無資料</div></button>'; }
+  /* 固定 8 列（標題、數值、年度、名次、折線、折線年度、差距、查看詳細內容），同一列卡片才能對齊 */
   var c=r['卡片'], first=r['本校第1名'];
   var vt=fmtv(r['本校數值'],unit), un=unit==='%'?'':unit, len=vt.length+un.length;
-  h+='<div class="oc-val"><b'+(len>12?' class="xl"':(len>8?' class="long"':''))+'>'+esc(vt)+(un?'<span class="u">'+esc(un)+'</span>':'')+'</b><small>'+esc(ry)+' '+esc(tu)+'</small></div>';
+  h+='<div class="oc-val"><b data-len="'+len+'">'+esc(vt)+(un?'<span class="u">'+esc(un)+'</span>':'')+'</b></div>';
+  h+='<div class="oc-yr">'+esc(ry)+' '+esc(tu)+'</div>';
   h+='<div class="oc-rank">名次 <b>'+esc(r['本校名次'])+'／'+esc(r['母體校數'])+'</b>'+(first?'<span class="badge">第 1 名</span>':'')+'</div>';
   var vals=[], yrs=[];
   blockYears(b).sort(function(a,c){return a-c;}).forEach(function(y){var q=yd(s,y); if(q&&q['狀態']==='有資料'){vals.push(q['本校數值']);yrs.push(y);}});
-  h+=sparkSVG(vals);
-  if(yrs.length) h+='<div class="spark-x"><span>'+yrs[0]+'</span><span>'+(yrs.length>1?yrs[yrs.length-1]:'')+'</span></div>';
+  h+='<div class="oc-sp">'+sparkSVG(vals)+'</div>';
+  h+='<div class="spark-x"><span>'+(yrs.length?yrs[0]:'')+'</span><span>'+(yrs.length>1?yrs[yrs.length-1]:'')+'</span></div>';
   h+='<div class="oc-gap"><div>與'+esc(c['比較標籤'])+' <span class="cmp">'+esc(c['比較學校名稱'])+'</span></div><div>差距 <b>'+esc(gapWithUnit(c['差距'],unit))+'</b></div></div>';
   return h+'<div class="oc-more">查看詳細內容 ›</div></button>';
 }
@@ -388,6 +406,13 @@ function renderOverview(){
   var rest=D['區塊'].map(function(b){return b['區塊編號'];}).filter(function(id){return !used[id];});
   h+=grp('其他',rest);
   document.getElementById('main').innerHTML=h;
+  /* 同一組卡片的數值用同一個字級（以最長的數值決定），避免同一列大小不一 */
+  [].forEach.call(document.querySelectorAll('#main .grid'),function(g){
+    var bs=g.querySelectorAll('.oc-val b'), mx=0;
+    [].forEach.call(bs,function(x){mx=Math.max(mx,Number(x.getAttribute('data-len')));});
+    var cls=mx>12?'xl':(mx>8?'long':'');
+    if(cls) [].forEach.call(bs,function(x){x.classList.add(cls);});
+  });
   var tb=document.getElementById('tabs');
   if(!tb.childNodes.length){
     tb.innerHTML=tabs.map(function(t){return '<a class="tab" href="#'+t[0]+'" data-sec="'+t[0]+'" data-hue="'+t[2]+'">'+esc(t[1])+'</a>';}).join('');
@@ -423,23 +448,57 @@ function spy(){
     }
   });
 }
-/* ---------- 使用說明：第一次來自動打開，之後點 i 按鈕開關 ---------- */
-var guide=document.getElementById('guide'), infobtn=document.getElementById('infobtn');
-function setGuide(open,focus){
-  guide.hidden=!open; infobtn.setAttribute('aria-expanded',String(open)); barH();
-  if(open&&focus) document.getElementById('guidex').focus({preventScroll:true});
-  if(!open){ try{ localStorage.setItem('guideSeen','1'); }catch(_){} if(focus) infobtn.focus({preventScroll:true}); }
+/* ---------- 使用說明：三頁導覽（第一次來自動打開，之後點 i 按鈕） ---------- */
+var W='rgba(255,255,255,', GOLD='#F0E199';
+var TOUR=[
+  {h:'這是什麼', t:'用教育部公開統計，比較東海大學與全國一般大學在招生、學生表現、國際化、研發等指標的名次。',
+   art:'<svg viewBox="0 0 300 150">'+[[20,30,.25],[66,46,.25],[112,58,.25],[204,94,.14],[250,110,.1]].map(function(r){return '<rect x="'+r[0]+'" y="'+r[1]+'" width="34" height="'+(140-r[1])+'" rx="6" fill="'+W+r[2]+')"/>';}).join('')
+     +'<rect x="158" y="76" width="34" height="64" rx="6" fill="'+GOLD+'"/><text x="175" y="68" text-anchor="middle" font-size="15" font-weight="800" fill="'+GOLD+'">東海</text>'
+     +'<path d="M37 22 L83 38 L129 50" fill="none" stroke="'+GOLD+'" stroke-width="2" stroke-dasharray="3 5"/></svg>'},
+  {h:'怎麼選', t:'在上方選學年度（可多選；研發類以「年度」計），再點分組頁籤跳到想看的類別。',
+   art:'<svg viewBox="0 0 300 150">'+[111,112,113,114].map(function(y,i){var on=i>0, x=18+i*68; return '<rect x="'+x+'" y="26" width="58" height="30" rx="15" fill="'+(on?'#fff':'none')+'" stroke="#fff" stroke-width="2"/><text x="'+(x+29)+'" y="46" text-anchor="middle" font-size="15" font-weight="800" fill="'+(on?'#1E7E34':'#fff')+'">'+y+'</text>';}).join('')
+     +['#1E7E34','#A9472A','#85620B','#0E6E78','#8A3A5C'].map(function(c,i){var x=22+i*56; return '<circle cx="'+x+'" cy="98" r="6" fill="'+(i===0?GOLD:W+'.55)')+'"/><rect x="'+(x+12)+'" y="93" width="30" height="10" rx="5" fill="'+W+(i===0?'.95':'.4')+')"/>';}).join('')
+     +'<rect x="16" y="114" width="56" height="4" rx="2" fill="'+GOLD+'"/></svg>'},
+  {h:'怎麼看', t:'點任一指標卡片，可看各年度名次、折線圖，以及名次在東海前面、最接近的 3 所學校。',
+   art:'<svg viewBox="0 0 300 150"><rect x="60" y="14" width="160" height="122" rx="14" fill="#fff"/><rect x="60" y="14" width="160" height="5" rx="2.5" fill="'+GOLD+'"/>'
+     +'<rect x="76" y="32" width="64" height="9" rx="4.5" fill="#C9D3CC"/><rect x="76" y="50" width="96" height="18" rx="5" fill="#1E2622"/><rect x="76" y="75" width="48" height="8" rx="4" fill="#C9D3CC"/>'
+     +'<polyline points="80,118 118,104 156,108 200,92" fill="none" stroke="#118DFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="200" cy="92" r="5" fill="#118DFF"/>'
+     +'<path d="M206 104 L206 140 L215 131 L222 146 L229 143 L222 128 L234 128 Z" fill="'+GOLD+'" stroke="#0F4A1E" stroke-width="2" stroke-linejoin="round"/></svg>'}
+];
+var tour=document.getElementById('tour'), infobtn=document.getElementById('infobtn'), tourAt=0;
+function tourShow(i){
+  tourAt=Math.max(0,Math.min(TOUR.length-1,i));
+  var t=TOUR[tourAt];
+  document.getElementById('tourArt').innerHTML=t.art;
+  document.getElementById('tourStep').textContent=(tourAt+1)+' / '+TOUR.length;
+  document.getElementById('tour-h').textContent=t.h;
+  document.getElementById('tourText').textContent=t.t;
+  [].forEach.call(document.querySelectorAll('#tourDots span'),function(d,k){d.classList.toggle('on',k===tourAt);});
+  document.getElementById('tourPrev').hidden=tourAt===0;
+  document.getElementById('tourNext').textContent=tourAt===TOUR.length-1?'開始使用':'下一步';
 }
-infobtn.addEventListener('click',function(){ setGuide(guide.hidden,true); });
-document.getElementById('guidex').addEventListener('click',function(){ setGuide(false,true); });
-document.addEventListener('keydown',function(e){ if((e.key==='Escape'||e.key==='Esc')&&!guide.hidden&&openId===null){ setGuide(false,true); } });
-document.addEventListener('click',function(e){ if(!guide.hidden&&!guide.contains(e.target)&&!infobtn.contains(e.target)) setGuide(false,false); });
-(function(){ var seen=false; try{ seen=localStorage.getItem('guideSeen')==='1'; }catch(_){} if(!seen) setGuide(true,false); })();
+function tourOpen(){
+  tourShow(0);
+  if(typeof tour.showModal==='function'){ if(!tour.open) tour.showModal(); } else { tour.setAttribute('open',''); }
+  document.getElementById('tourNext').focus();
+}
+function tourClose(){ if(tour.open){ if(typeof tour.close==='function') tour.close(); else tour.removeAttribute('open'); } }
+tour.addEventListener('close',function(){ try{ localStorage.setItem('guideSeen','1'); }catch(_){} infobtn.focus({preventScroll:true}); });
+infobtn.addEventListener('click',tourOpen);
+document.getElementById('tourX').addEventListener('click',tourClose);
+document.getElementById('tourPrev').addEventListener('click',function(){ tourShow(tourAt-1); });
+document.getElementById('tourNext').addEventListener('click',function(){ if(tourAt===TOUR.length-1) tourClose(); else tourShow(tourAt+1); });
+tour.addEventListener('click',function(e){ if(e.target===tour) tourClose(); });   /* 點視窗外的背景關閉 */
+tour.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'&&tourAt<TOUR.length-1){ e.preventDefault(); tourShow(tourAt+1); }
+  if(e.key==='ArrowLeft'&&tourAt>0){ e.preventDefault(); tourShow(tourAt-1); }
+});
+(function(){ var seen=false; try{ seen=localStorage.getItem('guideSeen')==='1'; }catch(_){} if(!seen) tourOpen(); })();
 
 var spyRaf=0;
 window.addEventListener('scroll',function(){ if(!spyRaf) spyRaf=requestAnimationFrame(function(){spyRaf=0;spy();}); },{passive:true});
 document.addEventListener('click',function(e){
-  var a=e.target.closest?e.target.closest('#tabs a.tab,a.brand'):null;
+  var a=e.target.closest?e.target.closest('#tabs a.tab'):null;
   if(!a) return;
   var id=a.getAttribute('href').slice(1), el=document.getElementById(id);
   if(!el) return;
